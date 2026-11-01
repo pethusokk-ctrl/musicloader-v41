@@ -1,37 +1,12 @@
-package com.musicloader;
-
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.minecraft.resources.Identifier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-public class MusicLoaderClient implements ClientModInitializer {
-    public static final String MOD_ID = "musicloader";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-
-    @Override
-    public void onInitializeClient() {
-        try {
-            MusicLibrary.init();
-        } catch (Throwable t) {
-            LOGGER.error("Не удалось загрузить библиотеку музыки", t);
-        }
-        try {
-            ClientLifecycleEvents.CLIENT_STOPPING.register(client -> MusicPlayer.shutdown());
-            Runtime.getRuntime().addShutdownHook(new Thread(MusicPlayer::shutdown, "musicloader-shutdown"));
-        } catch (Throwable t) {
-            LOGGER.error("Не удалось зарегистрировать остановку музыки", t);
-        }
-        try {
-            HudElementRegistry.attachElementAfter(VanillaHudElements.CHAT,
-                    Identifier.fromNamespaceAndPath(MOD_ID, "text"),
-                    (graphics, tickCounter) -> MusicHud.render(graphics));
-        } catch (Throwable t) {
-            LOGGER.error("Не удалось подключить текст в игре", t);
-        }
-        LOGGER.info("Music Loader запущен. Папка: {}", MusicLibrary.DIR);
-    }
-}
+   {
+     "required": false,
+     "package": "com.musicloader.mixin",
+     "compatibilityLevel": "JAVA_25",
+     "client": [
+       "PauseScreenMixin",
+       "ScreenDropMixin"
+     ],
+     "injectors": {
+       "defaultRequire": 0
+     }
+   }
