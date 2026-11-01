@@ -9,7 +9,7 @@ public final class MusicHud {
 
     public static void render(GuiGraphicsExtractor g) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.screen != null) return;
+        if (ScreenUtil.hasScreen()) return;
         String text = MusicLibrary.cachedText();
         if (text.isEmpty()) return;
         int w = mc.getWindow().getGuiScaledWidth();
